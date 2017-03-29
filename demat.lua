@@ -1,7 +1,9 @@
-function tardis.demat(pos, owner)
+function tardis.demat(owner)
+   local pos = tardis.owners[owner]["exterior"]
+   
    minetest.set_node(pos, {name = "tardis:tardis_demat"})
 
-   tardis.owners[owner]["exterior"] = tardis.owners[owner]["interior"]
+   tardis.owners[owner]["in_vortex"] = true
    
    minetest.sound_play("tardis_demat", {
 			  pos = pos,
@@ -215,6 +217,7 @@ minetest.register_node("tardis:tardis_demat_11", {
 			  
 			  on_timer = function(pos)
 			     minetest.set_node(pos, {name = "air"})
+			     minetest.forceload_free_block(pos)
 			  end,
 			  
 			  on_construct = function(pos)

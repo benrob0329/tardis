@@ -1,18 +1,24 @@
-function tardis.remat(pos, owner)
-   minetest.set_node(pos, {name = "tardis:tardis_remat"})
-   local meta = minetest.get_meta(pos)
+function tardis.remat(owner)
 
-   meta:set_string("owner", owner)
+   if (tardis.owners[owner]["destination"] == nil) then
+      return false
+   else
+      local pos = tardis.owners[owner]["destination"]
 
-   print(owner)
+      minetest.forceload_block(pos)
+      
+      minetest.set_node(pos, {name = "tardis:tardis_remat"})
+      local meta = minetest.get_meta(pos)
+      meta:set_string("owner", owner)
+      
+      tardis.owners[owner]["exterior"] = pos
    
-   tardis.owners[owner]["exterior"] = pos
-   
-   minetest.sound_play("tardis_remat", {
-			  pos = pos,
-			  max_hear_distance = 100,
-			  gain = 10,
-   })
+      minetest.sound_play("tardis_remat", {
+			     pos = pos,
+			     max_hear_distance = 100,
+			     gain = 10,
+      })
+   end
 end
 
 
@@ -184,6 +190,11 @@ minetest.register_node("tardis:tardis_remat_9", {
 			  
 			  on_timer = function(pos)
 			     tardis.swap_node(pos, {name = "tardis:tardis"})
+
+			     local meta = minetest.get_meta(pos)
+			     owner = meta:get_string("owner")
+
+			     tardis.owners[owner]["in_vortex"] = false
 			  end,
 			  
 			  on_construct = function(pos)
