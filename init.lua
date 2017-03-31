@@ -1,7 +1,7 @@
 tardis = {}
 tardis.owners = {}
 
-modpath = minetest.get_modpath()
+modpath = minetest.get_modpath(minetest.get_current_modpath())
 worldpath = minetest.get_worldpath()
 
 dofile(modpath .. "/remat.lua")
