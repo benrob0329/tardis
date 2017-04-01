@@ -17,16 +17,16 @@ if file then
 end
 
 minetest.register_chatcommand("set_nav", {
-				 func = function(name, param)
-				    if (tardis.owners[name] == nil) then
-				       name.chat_send_player(name, "Must be owner!")
-				    else
-				       local owner = name
-				       local player = minetest.get_player_by_name(name)
-
-				       tardis.set_nav(player, owner)
-				    end
-				 end
+                                 func = function(name, param)
+                                    if (tardis.owners[name] == nil) then
+                                       name.chat_send_player(name, "Must be owner!")
+                                    else
+                                       local owner = name
+                                       local player = minetest.get_player_by_name(name)
+                                       
+                                       tardis.set_nav(player, owner)
+                                    end
+                                 end
 })
 
 minetest.register_on_shutdown(function()

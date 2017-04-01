@@ -37,22 +37,22 @@ function tardis.set_nav(player, owner)
    local player_name = player:get_player_name()
    
    minetest.show_formspec(player_name, "tardis:remat_form",
-			  "size[4,3]" ..
-			     "field[1,1.5;3,1;coords;Co-ords;]" ..
-			     "button_exit[1,2;2,1;exit;Go!]")
+                          "size[4,3]" ..
+                             "field[1,1.5;3,1;coords;Co-ords;]" ..
+                             "button_exit[1,2;2,1;exit;Go!]")
    
    minetest.register_on_player_receive_fields(function(player, formname, fields)
-	 if formname ~= "tardis:remat_form" then
-	    return false
-	 end
+         if formname ~= "tardis:remat_form" then
+            return false
+         end
 
-	 local coords = minetest.string_to_pos(fields.coords)
+         local coords = minetest.string_to_pos(fields.coords)
 
-	 if (coords == nil) then
-	    minetest.chat_send_player(player_name, "Please Enter Valed Coords")
-	 else
-	    tardis.owners[owner]["destination"] = coords       
-	    return true
-	 end
+         if (coords == nil) then
+            minetest.chat_send_player(player_name, "Please Enter Valed Coords")
+         else
+            tardis.owners[owner]["destination"] = coords       
+            return true
+         end
    end)
 end
