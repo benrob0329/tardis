@@ -32,10 +32,10 @@ function tardis:spawn_interior (pos, owner)
 
     minetest.place_schematic (place_pos, modpath .. "/schematics/tardis_interior.mts")
 
-    tardis.tardises [owner]              = {}
-    tardis.tardises [owner]["exterior"]  = pos
-    tardis.tardises [owner]["interior"]  = interior_doors_pos
-    tardis.tardises [owner]["in_vortex"] = false
+    tardis.owners [owner]              = {}
+    tardis.owners [owner]["exterior"]  = pos
+    tardis.owners [owner]["interior"]  = interior_doors_pos
+    tardis.owners [owner]["in_vortex"] = false
 
     local demat_meta = minetest.get_meta (demat_lever_pos)
     demat_meta:set_string ("owner", owner)
@@ -43,10 +43,10 @@ function tardis:spawn_interior (pos, owner)
     local interior_doors_meta = minetest.get_meta (interior_doors_pos)
     interior_doors_meta:set_string ("owner", owner)
 
-    minetest.log("info", minetest.pos_to_string (tardis.tardises [owner]["interior"] ))
+    minetest.log("info", minetest.pos_to_string (tardis.owners [owner]["interior"] ))
 
-    local file = io.open (worldpath .. "/tardis.tardises", "w+")
-    file:write ( minetest.serialize (tardis.tardises) )
+    local file = io.open (worldpath .. "/tardis.owners", "w+")
+    file:write ( minetest.serialize (tardis.owners) )
     file:close()
 end
 
