@@ -114,7 +114,7 @@ minetest.register_node ("tardis:interior_doors", {
 			player:setpos (teleport)
 		else
 			player_name = player:get_player_name()
-			minetest.chat_send_player (player_name, "TARDIS In Vortex, Door Locked Automaticly")
+			minetest.chat_send_player (player_name, "The TARDIS is in the Vortex - the doors have been locked automatically.")
 		end
 	end
 })
