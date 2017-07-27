@@ -1,4 +1,5 @@
-function tardis.demat (owner)
+function tardis.demat (owner, name)
+	if owner ~= name then return false, "You don't own that TARDIS!" end
 	local pos = tardis.tardises [owner]["exterior"]
 
 	minetest.set_node (pos, {name = "tardis:tardis_demat"})
@@ -10,6 +11,7 @@ function tardis.demat (owner)
 		max_hear_distance = 100 ,
 		gain              = 10  ,
 	})
+	return true
 end
 
 
