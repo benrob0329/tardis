@@ -7,6 +7,7 @@ minetest.register_node ("tardis:tardis", {
 	paramtype         = "light" ,
 	is_ground_content = true ,
 
+	-- Setup Meta, clone meta if not placed by a player
 	on_place = function (itemstack, placer, pointed_thing)
 		local pos    = pointed_thing.above
 		local player = placer:get_player_name()
@@ -28,6 +29,7 @@ minetest.register_node ("tardis:tardis", {
 	end ,
 
 
+	-- Teleport Player
 	on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 		local meta     = minetest.get_meta (pos)
 		local owner    = meta:get_string ("owner")
@@ -39,6 +41,7 @@ minetest.register_node ("tardis:tardis", {
 })
 
 
+-- Initialize materialization, fail if nav is not set, then swap node to off pos
 minetest.register_node ("tardis:demat_lever_on", {
 	tiles             = {"tardis_demat.png"} ,
 	drawtype          = "mesh" ,
@@ -66,6 +69,7 @@ minetest.register_node ("tardis:demat_lever_on", {
 })
 
 
+-- Initialize dematerialization, then set lever to on pos
 minetest.register_node ("tardis:demat_lever_off", {
 	groups            = {crumbly = 1} ,
 	tiles             = {"tardis_demat.png"} ,
@@ -111,6 +115,7 @@ minetest.register_node ("tardis:navigator", {
 })
 
 
+-- Teleports player to exterior is in_vortex is set to false
 minetest.register_node ("tardis:interior_doors", {
 	tiles             = {"tardis_exterior.png"} ,
 	use_texture_alpha = true ,

@@ -2,6 +2,7 @@ local modname   = minetest.get_current_modname()
 local modpath   = minetest.get_modpath(modname)
 local worldpath = minetest.get_worldpath()
 
+-- Hacky node swap function since minetest.swap_node doesnt call any callbacks
 function tardis.swap_node (pos, name)
 	local meta     = minetest.get_meta (pos)
 	local meta_old = meta:to_table()
@@ -13,6 +14,7 @@ function tardis.swap_node (pos, name)
 end
 
 
+-- Spawn a TARDIS and set the controls/doors meta with relative coordinates
 function tardis:spawn_interior (pos, owner)
 	local place_pos = {
 		x = tardis.count * 12 ,
@@ -38,11 +40,13 @@ function tardis:spawn_interior (pos, owner)
 
 	minetest.place_schematic (place_pos, modpath .. "/schematics/tardis_interior.mts")
 
+	-- Add TARDIS to index
 	tardis.tardises [owner]              = {}
 	tardis.tardises [owner]["exterior"]  = pos
 	tardis.tardises [owner]["interior"]  = interior_doors_pos
 	tardis.tardises [owner]["in_vortex"] = false
 
+	--Set meta
 	local demat_meta = minetest.get_meta (demat_lever_pos)
 	demat_meta:set_string ("owner", owner)
 	
@@ -59,6 +63,8 @@ function tardis:spawn_interior (pos, owner)
 	file:close()
 end
 
+
+-- Set navigation, uses a formspec
 function tardis.set_nav (player, owner)
 	local player_name = player:get_player_name()
 	if player_name ~= owner then minetest.chat_send_player(player_name, "You don't own that TARDIS!"); return end
