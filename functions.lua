@@ -67,8 +67,8 @@ function tardis.set_nav (player, owner)
 
 		local coords = {x = tonumber(fields.x), y = tonumber(fields.y), z = tonumber(fields.z)}
 
-		if (coords == nil) then
-			minetest.chat_send_player (player_name, "Please Enter Valid Coords")
+		if (coords == nil or coords.x == nil or coords.y == nil or coords.z == nil) then
+			minetest.chat_send_player (player_name, "Please enter valid coordinates.")
 		else
 			tardis.tardises [owner]["destination"] = coords
 			return true
