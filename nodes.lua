@@ -25,7 +25,8 @@ minetest.register_node ("tardis:tardis", {
 
 		local meta = minetest.get_meta (pos)
 		meta:set_string ("owner", player)
-		itemstack:take_item (1)
+		itemstack:take_item()
+		return itemstack
 	end ,
 
 
