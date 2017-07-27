@@ -12,12 +12,6 @@ function tardis.remat (owner, name)
 		meta:set_string ("owner", owner)
 
 		tardis.tardises [owner]["exterior"] = pos
-
-		minetest.sound_play ("tardis_remat", {
-			pos               = pos ,
-			max_hear_distance = 100 ,
-			gain              = 10  ,
-		})
 		return true
 	end
 end
