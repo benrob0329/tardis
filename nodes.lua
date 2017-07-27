@@ -142,5 +142,14 @@ minetest.register_node ("tardis:interior_doors", {
 			player_name = player:get_player_name()
 			minetest.chat_send_player (player_name, "The TARDIS is in the Vortex - the doors have been locked automatically.")
 		end
+	end,
+	
+	on_timer = function (pos)
+		local meta = minetest.get_meta (pos)
+		local owner = meta:get_string ("owner")
+		
+		if tardis.tardises[owner]["in_vortex"] then -- If we're in a vortex, we must have been activated from the remat function.
+			tardis.tardises[owner]["in_vortex"] = false -- exit it.
+		end
 	end
 })

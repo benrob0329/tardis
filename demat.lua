@@ -1,7 +1,8 @@
 function tardis.demat (owner, name)
 	if owner ~= name then return false, "You don't own that TARDIS!" end
 	local pos = tardis.tardises [owner]["exterior"]
-
+	
+	minetest.forceload_block(pos)
 	minetest.set_node (pos, {name = "tardis:tardis_demat"})
 
 	tardis.tardises [owner]["in_vortex"] = true
