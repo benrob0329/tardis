@@ -17,9 +17,9 @@ end
 -- Spawn a TARDIS and set the controls/doors meta with relative coordinates
 function tardis:spawn_interior (pos, owner)
 	local place_pos = {
-		x = tardis.count * 12 ,
-		y = 30000    ,
-		z = 0 ,
+		x = tardis.count * 12,
+		y = 30000,
+		z = 0,
 	}
 	tardis.count = tardis.count + 1
 	local interior_doors_pos = {
@@ -58,9 +58,13 @@ function tardis:spawn_interior (pos, owner)
 
 	minetest.log("info", minetest.pos_to_string (tardis.tardises [owner]["interior"] ))
 
-	local file = io.open (worldpath .. "/tardis.tardises", "w+")
-	file:write ( minetest.serialize (tardis.tardises) )
-	file:close()
+	local count_file = io.open (worldpath .. "/tardis.tardises", "w+")
+	count_file:write ( minetest.serialize (tardis.count) )
+	count_file:close()
+
+	local count_file = io.open(worldpath .. "/tardis.count", "w+")
+	count_file:write(minetest.serialize(tardis.count))
+	count_file:close()
 end
 
 

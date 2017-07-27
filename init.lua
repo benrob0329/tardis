@@ -14,11 +14,17 @@ dofile (modpath .. "/nodes.lua")
 
 -- Open TARDIS index from file
 local file = io.open (worldpath .. "/tardis.tardises", "r")
+local count_file = io.open (worldpath .. "/tardis.count", "r")
 
 -- If file exists, write into current index
 if file then
 	tardis.tardises = minetest.deserialize (file:read("*all"))
 	file:close()
+end
+
+if count_file then
+	tardis.count = minetest.deserialize (count_file:read("*all"))
+	count_file:close()
 end
 
 -- Register chatcommand to set navigation, return a help message if user doe not own a TARDIS
@@ -41,4 +47,8 @@ minetest.register_on_shutdown( function()
 	local file = io.open (worldpath .. "/tardis.tardises", "w+")
 	file:write(minetest.serialize (tardis.tardises) )
 	file:close()
+
+	local count_file = io.open(worldpath .. "/tardis.count", "w+")
+	count_file:write(minetest.serialize(tardis.count))
+	count_file:close()
 end )
