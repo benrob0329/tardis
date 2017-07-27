@@ -13,26 +13,26 @@ dofile (modpath .. "/nodes.lua")
 local file = io.open (worldpath .. "/tardis.tardises", "r")
 
 if file then
-    tardis.tardises = minetest.deserialize (file:read("*all"))
-    file:close()
+		tardis.tardises = minetest.deserialize (file:read("*all"))
+		file:close()
 end
 
 minetest.register_chatcommand ("set_nav", {
-    description = "Sets the navigation coordinates for your TARDIS.",
-    func = function (name, param)
-        if (tardis.tardises [name] == nil) then
-            name.chat_send_player (name, "Must be owner!")
-        else
-            local owner = name
-            local player = minetest.get_player_by_name (name)
+		description = "Sets the navigation coordinates for your TARDIS.",
+		func = function (name, param)
+				if (tardis.tardises [name] == nil) then
+						name.chat_send_player (name, "Must be owner!")
+				else
+						local owner = name
+						local player = minetest.get_player_by_name (name)
 
-            tardis.set_nav (player, owner)
-        end
-    end
+						tardis.set_nav (player, owner)
+				end
+		end
 })
 
 minetest.register_on_shutdown( function()
-    local file = io.open (worldpath .. "/tardis.tardises", "w+")
-    file:write(minetest.serialize (tardis.tardises) )
-    file:close()
+		local file = io.open (worldpath .. "/tardis.tardises", "w+")
+		file:write(minetest.serialize (tardis.tardises) )
+		file:close()
 end )
