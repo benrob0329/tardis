@@ -1,5 +1,5 @@
 minetest.register_node ("tardis:tardis", {
-	decription        = "Time And Relative Dimention In Space" ,
+	decription        = "Time And Relative Dimension In Space" ,
 	tiles             = { "tardis_exterior.png" } ,
 	use_texture_alpha = true ,
 	drawtype          = "mesh" ,
@@ -51,15 +51,15 @@ minetest.register_node ("tardis:demat_lever_on", {
 		local meta        = minetest.get_meta(pos)
 		local owner       = meta:get_string("owner")
 
-		if (tardis.remat (owner) == false) then
-			minetest.chat_send_player (player_name, "Nav Not Set!!")
+		local rematted, msg = tardis.remat (owner, player:get_player_name())
+		if (rematted == false) then
+			minetest.chat_send_player (player_name, msg)
 		else
-			minetest.sound_play ("tardis_demat", {
+			minetest.sound_play ("tardis_remat", {
 				pos               = pos ,
-				max_hear_distance = 10 ,
-				gain              = 10 ,
-			})
-
+				max_hear_distance = 100 ,
+				gain              = 10  ,
+			})	
 			minetest.swap_node (pos, {name = "tardis:demat_lever_off"})
 		end
 	end
@@ -77,15 +77,36 @@ minetest.register_node ("tardis:demat_lever_off", {
 	on_rightclick     = function (pos, node, player, itemstack, pointed_thing)
 		local meta  = minetest.get_meta(pos)
 		local owner = meta:get_string("owner")
+		
+		local dematted, msg = tardis.demat (owner, player:get_player_name())
 
-		tardis.demat (owner)
-		minetest.sound_play ("tardis_demat", {
-			pos               = pos ,
-			max_hear_distance = 10  ,
-			gain              = 10  ,
-		})
+		if dematted then
+			minetest.sound_play ("tardis_demat", {
+				pos               = pos ,
+				max_hear_distance = 10  ,
+				gain              = 10  ,
+			})
 
-		minetest.swap_node (pos, {name = "tardis:demat_lever_on"})
+			minetest.swap_node (pos, {name = "tardis:demat_lever_on"})
+		else
+			minetest.chat_send_player(player:get_player_name(), msg)
+		end
+	end ,
+})
+
+minetest.register_node ("tardis:navigator", {
+	groups            = {crumbly = 1} ,
+	tiles             = {"tardis_navigator.png"} ,
+	drawtype          = "signlike" ,
+	paramtype         = "light" ,
+	paramtype2        = "wallmounted" ,
+	is_ground_content = true ,
+
+	on_rightclick     = function (pos, node, player, itemstack, pointed_thing)
+		local meta  = minetest.get_meta(pos)
+		local owner = meta:get_string("owner")
+
+		tardis.set_nav(player, owner)
 	end ,
 })
 

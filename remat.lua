@@ -1,6 +1,7 @@
-function tardis.remat (owner)
+function tardis.remat (owner, name)
+	if owner ~= name then return false, "You don't own that TARDIS!" end
 	if (tardis.tardises [owner]["destination"] == nil) then
-		return false
+		return false, "Coordinates haven't been set yet!"
 	else
 		local pos = tardis.tardises [owner]["destination"]
 
@@ -17,6 +18,7 @@ function tardis.remat (owner)
 			max_hear_distance = 100 ,
 			gain              = 10  ,
 		})
+		return true
 	end
 end
 

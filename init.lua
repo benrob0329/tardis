@@ -1,4 +1,5 @@
 tardis = {}
+tardis.count = 0
 tardis.tardises = {}
 
 local modname   = minetest.get_current_modname()

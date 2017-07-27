@@ -15,10 +15,11 @@ end
 
 function tardis:spawn_interior (pos, owner)
 	local place_pos = {
-		x = pos ["x"] ,
+		x = tardis.count * 12 ,
 		y = 30000    ,
-		z = pos ["z"] ,
+		z = 0 ,
 	}
+	tardis.count = tardis.count + 1
 	local interior_doors_pos = {
 		x = (place_pos ["x"] + 5) ,
 		y = (place_pos ["y"] + 1) ,
@@ -28,6 +29,11 @@ function tardis:spawn_interior (pos, owner)
 		x = (place_pos ["x"] + 4) ,
 		y = (place_pos ["y"] + 2) ,
 		z = (place_pos ["z"] + 7) ,
+	}
+	local nav_pos = {
+		x = (place_pos ["x"] + 4) ,
+		y = (place_pos ["y"] + 2) ,
+		z = (place_pos ["z"] + 8) ,
 	}
 
 	minetest.place_schematic (place_pos, modpath .. "/schematics/tardis_interior.mts")
@@ -39,6 +45,9 @@ function tardis:spawn_interior (pos, owner)
 
 	local demat_meta = minetest.get_meta (demat_lever_pos)
 	demat_meta:set_string ("owner", owner)
+	
+	local nav_meta = minetest.get_meta (nav_pos)
+	nav_meta:set_string ("owner", owner)
 
 	local interior_doors_meta = minetest.get_meta (interior_doors_pos)
 	interior_doors_meta:set_string ("owner", owner)
@@ -52,6 +61,8 @@ end
 
 function tardis.set_nav (player, owner)
 	local player_name = player:get_player_name()
+	if player_name ~= owner then minetest.chat_send_player(player_name, "You don't own that TARDIS!"); return end
+	if tardis.tardises[owner]["in_vortex"] == false then minetest.chat_send_player(player_name, "You must dematerialize the TARDIS first!"); return end
 
 	minetest.show_formspec (player_name, "tardis:remat_form",
 	"size[7,3]" ..
