@@ -18,6 +18,7 @@ if file then
 end
 
 minetest.register_chatcommand ("set_nav", {
+    description = "Sets the navigation coordinates for your TARDIS.",
     func = function (name, param)
         if (tardis.tardises [name] == nil) then
             name.chat_send_player (name, "Must be owner!")
