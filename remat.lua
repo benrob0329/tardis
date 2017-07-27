@@ -5,11 +5,12 @@ function tardis.remat (owner, name)
 	else
 		local pos = tardis.tardises [owner]["destination"]
 
-		minetest.forceload_block (pos)
 		minetest.set_node (pos, {name = "tardis:tardis_remat"})
 
 		local meta = minetest.get_meta (pos)
 		meta:set_string ("owner", owner)
+		
+		minetest.get_node_timer(tardis.tardises [owner]["interior"]):start(22.5)
 
 		tardis.tardises [owner]["exterior"] = pos
 		return true
@@ -188,8 +189,6 @@ minetest.register_node ("tardis:tardis_remat_9", {
 
 		local meta = minetest.get_meta (pos)
 		owner = meta:get_string ("owner")
-
-		tardis.tardises [owner]["in_vortex"] = false
 	end ,
 
 	on_construct = function (pos)

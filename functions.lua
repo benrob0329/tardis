@@ -92,3 +92,16 @@ function tardis.set_nav (player, owner)
 		end
 	end)
 end
+
+
+-- When a player teleports into a previously generated mapblock with the TARDIS, we want it to appear.
+minetest.register_on_generated(function(minp, maxp, blockseed)
+	for owner,table in pairs(tardis.tardises) do
+		local exterior = table["exterior"]
+		if exterior.x >= minp.x and exterior.y >= minp.y and exterior.z >= minp.z and
+		   exterior.x <= maxp.x and exterior.y <= maxp.y and exterior.z <= maxp.z then
+			minetest.set_node(exterior, {name="tardis:tardis"})
+			minetest.get_meta(exterior):set_string("owner", owner)
+		end
+	end
+end)
