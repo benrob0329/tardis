@@ -34,7 +34,7 @@ minetest.register_node ("tardis:tardis", {
 	on_rightclick = function (pos, node, player, itemstack, pointed_thing)
 		local meta     = minetest.get_meta (pos)
 		local owner    = meta:get_string ("owner")
-		local teleport = tardis.tardises [owner]["interior"]
+		local teleport = { x = tardis.tardises[owner]["interior"]["x"], y = tardis.tardises[owner]["interior"]["y"], z = tardis.tardises[owner]["interior"]["z"] + 1 }
 
 		player.setpos (player, teleport)
 		--player.set_look_horizontal(0)
@@ -118,7 +118,7 @@ minetest.register_node ("tardis:navigator", {
 
 -- Teleports player to exterior is in_vortex is set to false
 minetest.register_node ("tardis:interior_doors", {
-	tiles             = {"tardis_exterior.png"} ,
+	tiles             = {"tardis_doors.png"} ,
 	use_texture_alpha = true ,
 	drawtype          = "mesh" ,
 	mesh              = "tardis_interior_doors.obj" ,
@@ -137,7 +137,7 @@ minetest.register_node ("tardis:interior_doors", {
 		end
 
 		if (tardis.tardises [owner]["in_vortex"] == false) then
-			local teleport = tardis.tardises [owner]["exterior"]
+			local teleport = { x = tardis.tardises[owner]["exterior"]["x"], y = tardis.tardises[owner]["exterior"]["y"], z = tardis.tardises[owner]["exterior"]["z"] - 1 }
 			player:setpos (teleport)
 		else
 			player_name = player:get_player_name()
