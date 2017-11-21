@@ -10,4 +10,4 @@ Give yourself ```tardis:tardis``` and place down away from other Tardises (the i
 1. ~~Clean Up The Code, move all functions to functions.lua and node definitions to nodes.lua~~
 2. Add remat pos checks (~~validity~~ and air)
 3. ~~Redo meshes,~~ make doors open
-4. Add scanner~~/other device to enter remat pos~~
+4. Add scanner ~~/other device to enter remat pos~~
