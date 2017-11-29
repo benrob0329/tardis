@@ -1,5 +1,5 @@
 minetest.register_node("tardis:tardis", {
-	decription        = "Time And Relative Dimension In Space",
+	decription        = "Testing And Relative Dimensions In (3D) Space",
 	tiles             = { "tardis_exterior.png" },
 	use_texture_alpha = true,
 	drawtype          = "mesh",

@@ -125,19 +125,19 @@ function tardis:spawn_interior (pos, name)
 	}
 	tardis.add_count()
 	local interior_doors_pos = {
-		x = (place_pos["x"] + 5) ,
-		y = (place_pos["y"] + 1) ,
-		z = (place_pos["z"] + 1) ,
+		x = (place_pos.x + 5) ,
+		y = (place_pos.y + 1) ,
+		z = (place_pos.z + 1) ,
 	}
 	local demat_lever_pos = {
-		x = (place_pos["x"] + 4) ,
-		y = (place_pos["y"] + 2) ,
-		z = (place_pos["z"] + 7) ,
+		x = (place_pos.x + 4) ,
+		y = (place_pos.y + 2) ,
+		z = (place_pos.z + 7) ,
 	}
 	local nav_pos = {
-		x = (place_pos["x"] + 4) ,
-		y = (place_pos["y"] + 2) ,
-		z = (place_pos["z"] + 8) ,
+		x = (place_pos.x + 4) ,
+		y = (place_pos.y + 2) ,
+		z = (place_pos.z + 8) ,
 	}
 
 	minetest.place_schematic(place_pos, modpath .. "/schematics/tardis_interior.mts")
@@ -194,19 +194,24 @@ function tardis.show_nav_formspec(player_name, owner_name)
 	end)
 end
 
--- Make sure TARDISes places in ungenerated chunks exist and have meta set correctly.
+-- Make sure TARDISes placed in ungenerated chunks exist and have meta set correctly.
 minetest.register_on_generated(function(minp, maxp, blockseed)
 	local table = mod_storage:to_table()
 
 	for k, v in pairs(table.fields) do
-		if ((k == string.match(k, "tardis:.+:exterior")) and
-		    (minetest.string_to_pos(v).x > minp.x) and (minetest.string_to_pos(v).y > minp.y) and (minetest.string_to_pos(v).z > minp.z) and
-		    (minetest.string_to_pos(v).x < maxp.x) and (minetest.string_to_pos(v).y < maxp.y) and (minetest.string_to_pos(v).z < maxp.z)) then
-			minetest.set_node(minetest.string_to_pos(v), {name = "tardis:tardis"})
-			local meta = minetest.get_meta(minetest.string_to_pos(v))
-			local owner = string.match(k, "tardis:(.+):exterior")
-			
-			meta:set_string("owner", owner)
+		if (k == string.match(k, "tardis:.+:exterior")) then
+			local pos = minetest.string_to_pos(v)
+
+			if ((pos) and
+			    (pos.x >= minp.x) and (pos.y >= minp.y) and (pos.z >= minp.z) and
+			    (pos.x <= maxp.x) and (pos.y <= maxp.y) and (pos.z <= maxp.z)) then
+
+				minetest.set_node(pos, {name = "tardis:tardis"})
+				local meta = minetest.get_meta(minetest.string_to_pos(v))
+				local owner = string.match(k, "tardis:(.+):exterior")
+
+				meta:set_string("owner", owner)
+			end
 		end
 	end
 end)
