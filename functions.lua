@@ -1,6 +1,7 @@
 local modname     = minetest.get_current_modname()
 local modpath     = minetest.get_modpath(modname)
 local mod_storage = minetest.get_mod_storage()
+local tardis_context = {}
 
 -- Functions are fairly self explanitory, get or set the specified value.
 function tardis.set_nav(pos, name)
@@ -163,13 +164,10 @@ end
 
 -- Set navigation, uses a formspec
 function tardis.show_nav_formspec(player_name, owner_name)
-	if (player_name ~= owner_name) then
-		minetest.chat_send_player(player_name, "You don't own that TARDIS!")
-		return false end
-
 	local pos = tardis.get_nav(owner_name)
 
 	if (pos) then
+		tardis_context[player_name] = owner_name
 		minetest.show_formspec(player_name, "tardis:remat_form",
 		"size[7,3]" ..
 		"field[1,1.5;2,1;x;X;"..pos.x.."]" ..
@@ -177,21 +175,6 @@ function tardis.show_nav_formspec(player_name, owner_name)
 		"field[5,1.5;2,1;z;Z;"..pos.z.."]" ..
 		"button_exit[1,2;2,1;exit;Go!]")
 	else return false end
-
-	minetest.register_on_player_receive_fields(function (player, formname, fields)
-		if (formname ~= "tardis:remat_form") then
-			return false
-		end
-
-		pos = {x = tonumber(fields.x), y = tonumber(fields.y), z = tonumber(fields.z)}
-
-		if (pos == nil or pos.x == nil or pos.y == nil or pos.z == nil) then
-			minetest.chat_send_player(player_name, "Please enter valid coordinates.")
-		elseif (tardis.set_nav(pos, owner_name)) then
-			return true
-		else return false
-		end
-	end)
 end
 
 -- Make sure TARDISes placed in ungenerated chunks exist and have meta set correctly.
@@ -214,4 +197,33 @@ minetest.register_on_generated(function(minp, maxp, blockseed)
 			end
 		end
 	end
+end)
+
+minetest.register_on_player_receive_fields(function (player, formname, fields)
+	if (formname ~= "tardis:remat_form") then
+		return false
+	end
+
+	local player_name = player:get_player_name()
+	local owner_name = tardis_context[player_name]
+
+	if not owner_name then
+		minetest.log("error", player_name .. " sending invalid formspec data")
+		return true
+	end
+
+	local pos = tardis.get_nav(owner_name)
+
+	if pos then
+		if (tonumber(fields.x)) then pos.x = tonumber(fields.x)
+			else minetest.chat_send_player(player_name, "X Coordinate Invalid") end
+		if (tonumber(fields.y)) then pos.y = tonumber(fields.y)
+			else minetest.chat_send_player(player_name, "Y Coordinate Invalid") end
+		if (tonumber(fields.z)) then pos.z = tonumber(fields.z)
+			else minetest.chat_send_player(player_name, "Z Coordinate Invalid") end
+	end
+
+	tardis_context[player_name] = nil
+	tardis.set_nav(pos, owner_name)
+	return true
 end)
